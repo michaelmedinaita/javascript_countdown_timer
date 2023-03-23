@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      let timerStatus = "stopped"; // stopped, running, paused
+      let totalSeconds = 0;
+      let remainingSecond = 0;
+      let elapsedSeconds = 0;
+
+      let hours = 0;
+      let minutes = 0;
+      let seconds = 0;
+
+      let interval;
+
+      function setMinutesInInput(minutes) {
+        stopTimer();
+        let minuteInputEl = document.querySelector("#minuteInput");
+        minuteInputEl.value = minutes;
+        startTimer();
+      }
+
+      function startTimer() {
+        let hourInputEl = document.querySelector("#hourInput");
+        let minuteInputEl = document.querySelector("#minuteInput");
+        let secondInputEl = document.querySelector("#secondInput");
+
+        let pauseButtonEl = document.querySelector("#pauseButton");
+        let playButtonEl = document.querySelector("#playButton");
+        let stopButtonEl = document.querySelector("#stopButton");
+        let editorEl = document.querySelector("#editor");
+        let readOnlyEl = document.querySelector("#readOnly");
+
+        pauseButtonEl.classList.add("flex");
+        pauseButtonEl.classList.remove("hidden");
+
+        playButtonEl.classList.remove("flex");
+        playButtonEl.classList.add("hidden");
+
+        stopButtonEl.classList.add("flex");
+        stopButtonEl.classList.remove("hidden");
+
+        editorEl.classList.add("hidden");
+        editorEl.classList.remove("grid");
+
+        readOnlyEl.classList.remove("hidden");
+        readOnlyEl.classList.add("flex");
+
+        // Logic start here
+
+        if (timerStatus !== "paused") {
+          hours = Number(hourInputEl.value);
+          minutes = Number(minuteInputEl.value);
+          seconds = Number(secondInputEl.value);
+
+          totalSeconds = hours * 3600 + minutes * 60 + seconds;
+          remainingSecond = totalSeconds;
+          updateReadOnly(hours, minutes, seconds);
+        }
+        timerStatus = "running";
+
+        interval = setInterval(() => {
+          if (remainingSecond == 0) {
+            // time is up
+            stopTimer();
+            return;
+          }
+          if (elapsedSeconds < totalSeconds) elapsedSeconds++;
+          if (remainingSecond > 0) remainingSecond--;
+          let timeString = convertSecondsToTimeFormat(remainingSecond);
+
+          let timeArr = timeString.split(":"); // 01:03:53
+
+          updateReadOnly(timeArr[0], timeArr[1], timeArr[2]);
+
+          // update progress bar
+          updateProgressBar(elapsedSeconds, totalSeconds);
+        }, 1000);
+      }
+
+      function updateProgressBar(
+        elapsedSeconds = undefined,
+        totalSeconds = undefined
+      ) {
+        let progres = document.querySelector("#progress");
+        if (!totalSeconds) {
+          progres.style.width = "0";
+          return;
+        }
+        let totalPercentageCompleted = (elapsedSeconds / totalSeconds) * 100;
+        progres.style.width = totalPercentageCompleted + "%";
+      }
+
+      function convertSecondsToTimeFormat(seconds) {
+        var date = new Date(0);
+        date.setSeconds(seconds); // specify value for SECONDS here
+        var timeString = date.toISOString().substring(11, 19);
+        return timeString;
+      }
+
+      function updateReadOnly(hours, minutes, seconds) {
+        let readOnlyHoursEl = document.querySelector("#readOnly .hours");
+        let readOnlyMinutesEl = document.querySelector("#readOnly .minutes");
+        let readOnlySecondsEl = document.querySelector("#readOnly .seconds");
+        readOnlyHoursEl.innerHTML = hours;
+        readOnlyMinutesEl.innerHTML = minutes;
+        readOnlySecondsEl.innerHTML = seconds;
+      }
+
+      function pauseTimer() {
+        timerStatus = "paused";
+
+        let pauseButtonEl = document.querySelector("#pauseButton");
+        let playButtonEl = document.querySelector("#playButton");
+        pauseButtonEl.classList.remove("flex");
+        pauseButtonEl.classList.add("hidden");
+
+        playButtonEl.classList.add("flex");
+        playButtonEl.classList.remove("hidden");
+
+        clearInterval(interval);
+      }
+
+      function stopTimer() {
+        timerStatus = "stopped";
+        clearInterval(interval);
+        updateProgressBar();
+        let pauseButtonEl = document.querySelector("#pauseButton");
+        let playButtonEl = document.querySelector("#playButton");
+        let stopButtonEl = document.querySelector("#stopButton");
+        let editorEl = document.querySelector("#editor");
+        let readOnlyEl = document.querySelector("#readOnly");
+
+        let hourInputEl = document.querySelector("#hourInput");
+        let minuteInputEl = document.querySelector("#minuteInput");
+        let secondInputEl = document.querySelector("#secondInput");
+
+        hourInputEl.value = "00";
+        minuteInputEl.value = "00";
+        secondInputEl.value = "00";
+
+        pauseButtonEl.classList.remove("flex");
+        pauseButtonEl.classList.add("hidden");
+
+        playButtonEl.classList.add("flex");
+        playButtonEl.classList.remove("hidden");
+
+        stopButtonEl.classList.remove("flex");
+        stopButtonEl.classList.add("hidden");
+
+        editorEl.classList.remove("hidden");
+        editorEl.classList.add("grid");
+
+        readOnlyEl.classList.add("hidden");
+        readOnlyEl.classList.remove("flex");
+
+        totalSeconds = 0;
+        remainingSecond = 0;
+        elapsedSeconds = 0;
+
+        hours = 0;
+        minutes = 0;
+        seconds = 0;
+      }
+    </script>
+  </head>
+  <body>
+    <div class="p-5 bg-orange-50 h-[100vh]">
+      <!-- Pre defined minutes -->
+      <div
+        class="border-green-600 border grid grid-cols-6 w-full h-20 text-blue-900 font-bold rounded-md text-2xl"
+      >
+        <div
+          onclick="setMinutesInInput(1)"
+          class="flex items-center border-r-[1px] border-green-600 justify-center hover:bg-green-300 cursor-pointer"
+        >
+          1min
+        </div>
+        <div
+          onclick="setMinutesInInput(5)"
+          class="flex items-center border-r-[1px] border-green-600 justify-center hover:bg-green-300 cursor-pointer"
+        >
+          5min
+        </div>
+        <div
+          onclick="setMinutesInInput(10)"
+          class="flex items-center border-r-[1px] border-green-600 justify-center hover:bg-green-300 cursor-pointer"
+        >
+          10min
+        </div>
+        <div
+          onclick="setMinutesInInput(15)"
+          class="flex items-center border-r-[1px] border-green-600 justify-center hover:bg-green-300 cursor-pointer"
+        >
+          15min
+        </div>
+        <div
+          onclick="setMinutesInInput(20)"
+          class="flex items-center border-r-[1px] border-green-600 justify-center hover:bg-green-300 cursor-pointer"
+        >
+          20min
+        </div>
+        <div
+          onclick="setMinutesInInput(30)"
+          class="flex items-center border-green-600 justify-center hover:bg-green-300 cursor-pointer"
+        >
+          30min
+        </div>
+      </div>
+
+      <div
+        class="grid grid-cols-3 justify-items-center py-8 text-2xl font-bold"
+      >
+        <div>Hours</div>
+        <div>Minutes</div>
+        <div>Seconds</div>
+      </div>
+
+      <div id="timer">
+        <div id="editor" class="grid-cols-3 text-9xl grid">
+          <div class="flex">
+            <div class="w-[97%]">
+              <input
+                id="hourInput"
+                type="number"
+                class="grow h-48 text-center w-full border-2 border-gray-400"
+                value="00"
+              />
+            </div>
+            <div class="w-[3%]">:</div>
+          </div>
+
+          <div class="flex">
+            <div class="w-[97%]">
+              <input
+                id="minuteInput"
+                type="number"
+                class="grow h-48 text-center w-full border-2 border-gray-400"
+                value="00"
+              />
+            </div>
+            <div class="w-[3%]">:</div>
+          </div>
+
+          <div class="flex">
+            <div class="w-full">
+              <input
+                id="secondInput"
+                type="number"
+                class="grow h-48 text-center w-full border-2 border-gray-400"
+                value="00"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          id="readOnly"
+          class="text-9xl font-bold hidden justify-evenly border-4 border-gray-300 rounded-lg h-[240px] items-center"
+        >
+          <div class="hours">12</div>
+          <div>:</div>
+          <div class="minutes">10</div>
+          <div>:</div>
+          <div class="seconds">00</div>
+        </div>
+      </div>
+
+      <div
+        id="progressBar"
+        class="bg-gray-400 h-[40px] w-full rounded-3xl mt-10 overflow-hidden"
+      >
+        <div
+          id="progress"
+          class="bg-green-600 w-0 h-full transition-all duration-500"
+        ></div>
+      </div>
+
+      <div id="actions" class="pt-16 flex gap-10">
+        <button
+          id="playButton"
+          onclick="startTimer()"
+          class="bg-green-700 text-5xl flex justify-center items-center h-32 grow text-white rounded-3xl"
+        >
+          ▶
+        </button>
+
+        <button
+          id="pauseButton"
+          onclick="pauseTimer()"
+          class="bg-green-700 justify-center items-center h-32 grow text-white rounded-3xl hidden"
+        >
+          <img class="w-10" src="./pauseIcon.svg" />
+        </button>
+
+        <button
+          id="stopButton"
+          onclick="stopTimer()"
+          class="bg-gray-400 text-5xl hidden justify-center items-center h-32 grow text-white rounded-3xl"
+        >
+          &#x2715;
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
