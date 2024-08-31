@@ -7,6 +7,8 @@
     <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+    
+          
       let timerStatus = "stopped"; // stopped, running, paused
       let totalSeconds = 0;
       let remainingSecond = 0;
@@ -167,54 +169,65 @@
         minutes = 0;
         seconds = 0;
       }
+    
+    
     </script>
   </head>
   <body>
-    <div class="p-5 bg-orange-50 h-[100vh]">
+           
+        
+        <div>
+              <video onloadedmetadata="this.mute=true" autoplay="loop">
+              <source src="https://cdn.pixabay.com/video/2016/11/04/6266-190550868_large.mp4">
+             </video>
+        
+        
+        <div class="p-5 bg-orange h-[10vh]">
+       
       <!-- Pre defined minutes -->
       <div
-        class="border-green-600 border grid grid-cols-6 w-full h-20 text-blue-900 font-bold rounded-md text-2xl"
+        class="border-blue-none border grid grid-cols-6 w-full h-13 text-blue-900 font-bold rounded-md text-1xl"
       >
         <div
           onclick="setMinutesInInput(1)"
-          class="flex items-center border-r-[1px] border-green-600 justify-center hover:bg-green-300 cursor-pointer"
+          class="flex items-center border-r-[1px] border-blue-600 justify-center hover:bg-blue-300 cursor-pointer"
         >
           1min
         </div>
         <div
           onclick="setMinutesInInput(5)"
-          class="flex items-center border-r-[1px] border-green-600 justify-center hover:bg-green-300 cursor-pointer"
+          class="flex items-center border-r-[1px] border-blue-600 justify-center hover:bg-blue-300 cursor-pointer"
         >
           5min
         </div>
         <div
           onclick="setMinutesInInput(10)"
-          class="flex items-center border-r-[1px] border-green-600 justify-center hover:bg-green-300 cursor-pointer"
+          class="flex items-center border-r-[1px] border-blue-600 justify-center hover:bg-blue-300 cursor-pointer"
         >
           10min
         </div>
         <div
           onclick="setMinutesInInput(15)"
-          class="flex items-center border-r-[1px] border-green-600 justify-center hover:bg-green-300 cursor-pointer"
+          class="flex items-center border-r-[1px] border-blue-600 justify-center hover:bg-blue-300 cursor-pointer"
         >
           15min
         </div>
         <div
           onclick="setMinutesInInput(20)"
-          class="flex items-center border-r-[1px] border-green-600 justify-center hover:bg-green-300 cursor-pointer"
+          class="flex items-center border-r-[1px] border-blue-600 justify-center hover:bg-blue-300 cursor-pointer"
         >
           20min
         </div>
         <div
           onclick="setMinutesInInput(30)"
-          class="flex items-center border-green-600 justify-center hover:bg-green-300 cursor-pointer"
+          class="flex items-center border-blue-600 justify-center hover:bg-blue-300 cursor-pointer"
         >
           30min
         </div>
       </div>
 
       <div
-        class="grid grid-cols-3 justify-items-center py-8 text-2xl font-bold"
+        class="grid grid-cols-3 justify-items-center py-6 px-1 text-2xl font-bold text-blue-500"
       >
         <div>Hours</div>
         <div>Minutes</div>
@@ -222,13 +235,13 @@
       </div>
 
       <div id="timer">
-        <div id="editor" class="grid-cols-3 text-9xl grid">
+        <div id="editor" class="grid-cols-3 text-5xl grid">
           <div class="flex">
-            <div class="w-[97%]">
+            <div class="w-[90%] ">
               <input
                 id="hourInput"
                 type="number"
-                class="grow h-48 text-center w-full border-2 border-gray-400"
+                class="grow h-48 text-white text-center w-full rounded-xl  bg-gradient-to-tr from-cyan-500 to-blue-500"
                 value="00"
               />
             </div>
@@ -236,11 +249,11 @@
           </div>
 
           <div class="flex">
-            <div class="w-[97%]">
+            <div class="w-[90%]">
               <input
                 id="minuteInput"
                 type="number"
-                class="grow h-48 text-center w-full border-2 border-gray-400"
+                class="grow h-48 text-white text-center w-full rounded-xl bg-gradient-to-b from-cyan-500 to-blue-500"
                 value="00"
               />
             </div>
@@ -248,11 +261,11 @@
           </div>
 
           <div class="flex">
-            <div class="w-full">
+            <div class="w-[90%]">
               <input
                 id="secondInput"
                 type="number"
-                class="grow h-48 text-center w-full border-2 border-gray-400"
+                class="grow h-48  text-white text-center w-full rounded-xl bg-gradient-to-t from-cyan-500 to-blue-500 "
                 value="00"
               />
             </div>
@@ -260,11 +273,11 @@
         </div>
         <div
           id="readOnly"
-          class="text-9xl font-bold hidden justify-evenly border-4 border-gray-300 rounded-lg h-[240px] items-center"
+          class="text-5xl font-bold hidden text-white justify-evenly bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg h-[240px] items-center"
         >
           <div class="hours">12</div>
           <div>:</div>
-          <div class="minutes">10</div>
+          <div class="minutes">1</div>
           <div>:</div>
           <div class="seconds">00</div>
         </div>
@@ -304,7 +317,11 @@
         >
           &#x2715;
         </button>
+             
       </div>
+            
     </div>
+              </div>
+              
   </body>
 </html>
